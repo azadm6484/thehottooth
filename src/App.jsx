@@ -465,14 +465,14 @@ const AppointmentSection = () => (
         </div>
 
         <div className="glass-effect rounded-[2rem] p-4 h-[750px] overflow-hidden">
-          {/* Calendly Widget */}
-          <iframe
-            src="https://calendly.com/azadm6484/30min?background_color=030712&text_color=ffffff&primary_color=d4f6ac"
-            width="100%"
-            height="100%"
-            frameBorder="0"
-            className="rounded-[1.5rem]"
-          ></iframe>
+          {/* Calendly Widget Container to hide scrollbar */}
+          <div className="w-full h-full overflow-hidden rounded-[1.5rem]">
+            <iframe
+              src="https://calendly.com/azadm6484/30min?background_color=030712&text_color=ffffff&primary_color=d4f6ac"
+              frameBorder="0"
+              className="w-[calc(100%+24px)] h-full"
+            ></iframe>
+          </div>
         </div>
       </div>
     </div>
@@ -601,9 +601,9 @@ const Footer = ({ onContactClick }) => {
   ];
 
   return (
-    <footer className="bg-[#020408] pt-20 pb-10 border-t border-white/10">
+    <footer className="bg-[#020408] pt-12 pb-6 border-t border-white/10">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-10">
           <div className="md:col-span-2">
             <a href="#" className="flex items-center gap-2 mb-6 group">
               <img src="/assets/the_hot_tooth.png" alt="Logo" className="w-[70px] h-[70px] object-contain group-hover:scale-105 transition-transform translate-y-1 -mr-4" />
@@ -625,8 +625,8 @@ const Footer = ({ onContactClick }) => {
           </div>
 
           <div>
-            <h4 className="font-bold text-lg mb-6">Quick Links</h4>
-            <ul className="space-y-4">
+            <h4 className="font-bold text-lg mb-4">Quick Links</h4>
+            <ul className="space-y-2">
               {footerLinks.map(link => (
                 <li key={link.name}>
                   <a
@@ -647,15 +647,15 @@ const Footer = ({ onContactClick }) => {
           </div>
 
           <div>
-            <h4 className="font-bold text-lg mb-6">Contact</h4>
-            <ul className="space-y-4 text-gray-400">
+            <h4 className="font-bold text-lg mb-4">Contact</h4>
+            <ul className="space-y-3 text-gray-400">
               <li className="flex items-start gap-3"><MapPin className="w-5 h-5 text-brand-green shrink-0 mt-1" /> IBB-2, Millennium Place, Shop no-14, Second Floor, Golf City, Lucknow, UP 226030</li>
               <li className="flex items-center gap-3"><Phone className="w-5 h-5 text-brand-green shrink-0" /> +91 89480 00125</li>
             </ul>
           </div>
         </div>
 
-        <div className="text-center text-gray-600 text-sm pt-8 border-t border-white/10">
+        <div className="text-center text-gray-600 text-sm pt-6 border-t border-white/10">
           © {new Date().getFullYear()} The Hot Tooth. All rights reserved.
         </div>
       </div>
