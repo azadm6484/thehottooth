@@ -23,6 +23,27 @@ const Navbar = ({ onContactClick }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleNavClick = (e, item) => {
+    e.preventDefault();
+    if (item.name === 'Contact') {
+      onContactClick();
+      setIsOpen(false);
+      return;
+    }
+
+    if (item.href && item.href.startsWith('#')) {
+      setIsOpen(false);
+      setTimeout(() => {
+        const element = document.querySelector(item.href);
+        if (element) {
+          const navbarHeight = 100;
+          const y = element.getBoundingClientRect().top + window.scrollY - navbarHeight;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      }, 150); // wait for menu closing animation
+    }
+  };
+
   return (
     <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-brand-darker/90 backdrop-blur-md py-4 shadow-lg' : 'bg-transparent py-6'}`}>
       <div className="container mx-auto px-6 flex justify-between items-center">
@@ -41,12 +62,7 @@ const Navbar = ({ onContactClick }) => {
               href={item.href}
               target={item.target}
               rel={item.rel}
-              onClick={(e) => {
-                if (item.name === 'Contact') {
-                  e.preventDefault();
-                  onContactClick();
-                }
-              }}
+              onClick={(e) => handleNavClick(e, item)}
               className="text-sm font-medium text-gray-300 hover:text-brand-green transition-colors"
             >
               {item.name}
@@ -77,15 +93,7 @@ const Navbar = ({ onContactClick }) => {
                   href={item.href}
                   target={item.target}
                   rel={item.rel}
-                  onClick={(e) => {
-                    if (item.name === 'Contact') {
-                      e.preventDefault();
-                      onContactClick();
-                      setIsOpen(false);
-                    } else if (!item.target) {
-                      setIsOpen(false);
-                    }
-                  }}
+                  onClick={(e) => handleNavClick(e, item)}
                   className="text-lg font-medium text-gray-300 hover:text-brand-green"
                 >
                   {item.name}
@@ -100,7 +108,7 @@ const Navbar = ({ onContactClick }) => {
 };
 
 const HeroSection = () => (
-  <section id="home" className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+  <section id="home" className="scroll-mt-28 relative min-h-screen flex items-center pt-20 overflow-hidden">
     <div
       className="absolute inset-0 z-0 bg-cover bg-center bg-fixed"
       style={{ backgroundImage: "url('/assets/patient7.webp')" }}
@@ -190,7 +198,7 @@ const WhyChooseUs = () => {
 };
 
 const AboutUsSection = () => (
-  <section id="about" className="py-24 bg-brand-dark relative overflow-hidden border-t border-white/5">
+  <section id="about" className="scroll-mt-28 py-24 bg-brand-dark relative overflow-hidden border-t border-white/5">
     <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-brand-green/5 via-transparent to-transparent"></div>
     <div className="container mx-auto px-6 relative z-10">
       <div className="grid md:grid-cols-2 gap-16 items-center">
@@ -272,7 +280,7 @@ const ServicesSection = () => {
   const visibleServices = showAll ? services : services.slice(0, 4);
 
   return (
-    <section id="services" className="py-24 bg-brand-darker">
+    <section id="services" className="scroll-mt-28 py-24 bg-brand-darker">
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div>
@@ -334,7 +342,7 @@ const DoctorsSection = () => {
   };
 
   return (
-    <section id="doctors" className="py-24 bg-brand-dark relative overflow-hidden">
+    <section id="doctors" className="scroll-mt-28 py-24 bg-brand-dark relative overflow-hidden">
       <div className="absolute -top-40 -right-40 w-96 h-96 bg-brand-green/10 rounded-full blur-[100px]"></div>
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
@@ -376,14 +384,14 @@ const DoctorsSection = () => {
 
 const ReviewsSection = () => {
   const reviews = [
-    { name: "Rahul S.", text: "Best dental experience I've ever had. Dr. Azad and the team are incredibly professional. The clinic is spotless and the equipment is state-of-the-art.", rating: 5, time: "2 weeks ago" },
+    { name: "Rahul S.", text: "Best dental experience I've ever had. Dr. Ashutosh and the team are incredibly professional. The clinic is spotless and the equipment is state-of-the-art.", rating: 5, time: "2 weeks ago" },
     { name: "Priya M.", text: "Painless root canal! I was terrified of the procedure but the doctors here made it so comfortable. Highly recommend The Hot Tooth.", rating: 5, time: "1 month ago" },
     { name: "Amit K.", text: "Got my teeth whitened here before my wedding. The results were amazing and the staff was so friendly.", rating: 5, time: "3 months ago" },
     { name: "Neha G.", text: "Took my kid here for his first checkup. The staff was incredibly patient and made him feel right at home.", rating: 5, time: "4 months ago" }
   ];
 
   return (
-    <section id="reviews" className="py-24 bg-brand-dark">
+    <section id="reviews" className="scroll-mt-28 py-24 bg-brand-dark">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="font-accent text-3xl md:text-4xl text-brand-red mb-2">Testimonials</h2>
@@ -431,7 +439,7 @@ const ReviewsSection = () => {
 };
 
 const AppointmentSection = () => (
-  <section id="book" className="py-24 bg-brand-darker border-t border-white/5">
+  <section id="book" className="scroll-mt-28 py-24 bg-brand-darker border-t border-white/5">
     <div className="container mx-auto px-6 max-w-6xl">
       <div className="grid md:grid-cols-2 gap-16 items-center">
         <div>
@@ -541,9 +549,9 @@ const ContactModal = ({ isOpen, onClose }) => {
             </button>
 
             {isSuccess ? (
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.9 }} 
-                animate={{ opacity: 1, scale: 1 }} 
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
                 className="text-center py-12"
               >
                 <div className="w-24 h-24 bg-brand-green/20 rounded-full flex items-center justify-center mx-auto mb-6">
