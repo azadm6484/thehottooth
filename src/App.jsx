@@ -84,7 +84,7 @@ const Navbar = ({ onContactClick }) => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-brand-darker border-t border-white/10"
+            className="md:hidden bg-brand-darker border-t border-white/10 overflow-y-auto max-h-[calc(100vh-80px)]"
           >
             <div className="flex flex-col px-6 py-4 gap-4">
               {navLinks.map((item) => (
@@ -292,7 +292,7 @@ const ServicesSection = () => {
           </button>
         </div>
 
-        <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <motion.div layout className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 overflow-x-auto md:overflow-visible pb-8 md:pb-0 no-scrollbar snap-x">
           <AnimatePresence>
             {visibleServices.map((s, i) => (
               <motion.div
@@ -301,7 +301,7 @@ const ServicesSection = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
-                className="group rounded-3xl overflow-hidden relative cursor-pointer"
+                className="min-w-[280px] md:min-w-0 group rounded-3xl overflow-hidden relative cursor-pointer snap-center"
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-darker via-brand-darker/50 to-transparent z-10 opacity-80 group-hover:opacity-90 transition-opacity"></div>
                 <img src={s.img} alt={s.title} className="w-full h-[400px] object-cover group-hover:scale-105 transition-transform duration-700" />
@@ -361,7 +361,13 @@ const DoctorsSection = () => {
                 variants={positionVariants}
                 transition={{ duration: 0.6, type: "spring", bounce: 0.2 }}
                 onClick={() => setActiveIndex(i)}
-                className="absolute w-[80%] md:w-[50%] h-full glass-effect rounded-[2.5rem] overflow-hidden cursor-pointer shadow-[0_0_30px_rgba(0,0,0,0.5)]"
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                onDragEnd={(e, info) => {
+                  if (info.offset.x > 50) setActiveIndex((prev) => (prev - 1 + 3) % 3);
+                  else if (info.offset.x < -50) setActiveIndex((prev) => (prev + 1) % 3);
+                }}
+                className="absolute w-[80%] md:w-[50%] h-full glass-effect rounded-[2.5rem] overflow-hidden cursor-pointer shadow-[0_0_30px_rgba(0,0,0,0.5)] touch-none"
               >
                 <img src={img.src} alt={img.title} className="w-full h-full object-cover object-top" />
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-darker via-brand-darker/50 to-transparent"></div>
@@ -407,7 +413,7 @@ const ReviewsSection = () => {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 overflow-x-auto md:overflow-visible pb-8 md:pb-0 no-scrollbar snap-x">
           {reviews.map((review, i) => (
             <motion.div
               key={i}
@@ -415,7 +421,7 @@ const ReviewsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="glass-effect p-8 rounded-3xl hover:-translate-y-2 transition-transform duration-300"
+              className="min-w-[280px] md:min-w-0 glass-effect p-8 rounded-3xl hover:-translate-y-2 transition-transform duration-300 snap-center"
             >
               <div className="flex items-center gap-4 mb-4">
                 <div className="w-12 h-12 rounded-full bg-brand-green/20 flex items-center justify-center text-brand-green font-bold text-lg">
